@@ -6,11 +6,13 @@ import { Link } from "../types/index.ts";
 import LinkCard from "./LinkCard.tsx";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 
+const defaultHistory: Link[] = [{ "title": "Fresh App", "image": "https://fresh.deno.dev/favicon.ico", "url": "https://fresh.deno.dev/" }, { "title": "Deno — A modern runtime for JavaScript and TypeScript", "description": "Deno is a simple, modern runtime for JavaScript and TypeScript that uses V8 and is built in Rust.", "image": "https://deno.land/favicon.ico", "url": "https://deno.land" }, { "title": "愧怍的小站", "description": "Blog", "image": "https://kuizuo.cn/img/logo.png", "url": "https://kuizuo.cn" }]
+
 export default function LinkMaker() {
   const [url, setUrl] = useState("");
 
   const history = signal<Link[]>(
-    IS_BROWSER ? JSON.parse(localStorage.getItem("history")!) || [] : []
+    IS_BROWSER ? JSON.parse(localStorage.getItem("history")!) || defaultHistory : []
   );
 
   const fetchLink = async (url: string) => {
