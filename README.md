@@ -4,11 +4,9 @@ This is a [link maker](https://link-maker.deno.dev), you can input your link and
 
 inspired by [linkpreview](https://linkpreview.net/).
 
-## 🚀 Features
+## 🎨Preview
 
-- Convert link to card-style preview
-
-- TODO...
+![](https://img.kuizuo.cn/link-maker.png)
 
 ## 🤖 Technologies
 

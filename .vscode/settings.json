@@ -12,5 +12,8 @@
     "https://x.nest.land": true,
     "https://crux.land": true,
     "http://deno.land": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
   }
 }

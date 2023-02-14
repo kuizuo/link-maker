@@ -11,9 +11,14 @@ export default function Header() {
         </div>
       </div>
       <a href="https://fresh.deno.dev" target="_blank">
-        <img width="200" height="32" src="https://fresh.deno.dev/fresh-badge.svg" alt="Made with Fresh" />
+        <img
+          width="200"
+          height="32"
+          src="https://fresh.deno.dev/fresh-badge.svg"
+          alt="Made with Fresh"
+        />
       </a>
-      <a href={'https://github.com/kuizuo/link-maker'} target="_blank" class="">
+      <a href={"https://github.com/kuizuo/link-maker"} target="_blank" class="">
         <GithubIcon />
       </a>
     </div>

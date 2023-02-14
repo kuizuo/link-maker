@@ -9,10 +9,10 @@ export function isHttp(url: string) {
 export const fetchLinkInfo = async (url: string): Promise<Link | null> => {
   try {
     const { origin } = new URL(url);
-    const response = await fetch(url,{
+    const response = await fetch(url, {
       headers: {
         accept: "text/html",
-      }
+      },
     });
     const html = await response.text();
 

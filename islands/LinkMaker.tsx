@@ -1,38 +1,39 @@
 import { useState } from "preact/hooks";
-import { signal } from "@preact/signals";
 import { IS_BROWSER } from "$fresh/runtime.ts";
+import IconAsset from "https://deno.land/x/tabler_icons_tsx@0.0.2/tsx/asset.tsx";
+
 import Button from "../components/Button.tsx";
 import Input from "../components/Input.tsx";
+import ViewTypeSwitch from "../components/ViewTypeSwitch.tsx";
 import LinkCard from "./LinkCard.tsx";
 
-import { Link } from "../types/index.ts";
+import type { Link } from "../types/index.ts";
+import { useViewType } from "../hooks/useViewType.ts";
 
 const defaultHistory: Link[] = [{
   title: "fresh - The next-gen web framework.",
-  description: "Just in time edge rendering, island based interactivity, and no configuration TypeScript support usi...",
+  description:
+    "Just in time edge rendering, island based interactivity, and no configuration TypeScript support usi...",
   image: "https://fresh.deno.dev/home-og.png?__frsh_c=c5xfm6hjab90",
-  url: "https://fresh.deno.dev/"
+  url: "https://fresh.deno.dev/",
 }, {
   title: "Deno — A modern runtime for JavaScript and TypeScript",
-  description: "Deno is a simple, modern runtime for JavaScript and TypeScript that uses V8 and is built in Rust.",
+  description:
+    "Deno is a simple, modern runtime for JavaScript and TypeScript that uses V8 and is built in Rust.",
   image: "https://deno.land/og/image.png",
-  url: "https://deno.land"
-}, {
-  title: "愧怍的小站",
-  description: "愧怍的个人博客",
-  image: "https://kuizuo.cn/img/logo.png",
-  url: "https://kuizuo.cn",
+  url: "https://deno.land",
 }];
 
 export default function LinkMaker() {
   const [url, setUrl] = useState("");
-  const [history, setHistory] = useState(
+  const [history, setHistory] = useState<Link[]>(
     IS_BROWSER
       ? JSON.parse(localStorage.getItem("history")!) || defaultHistory
-      : []
+      : [],
   );
 
   const [loading, setLoading] = useState(false);
+  const { viewType, toggleViewType } = useViewType();
 
   const fetchLink = async (url: string) => {
     const response = await fetch(`/api/link?q=${url}`);
@@ -44,10 +45,9 @@ export default function LinkMaker() {
     setLoading(true);
 
     try {
-
       const link = await fetchLink(url);
       setLoading(false);
-      
+
       if (!link) {
         alert("link not found");
         return;
@@ -96,12 +96,26 @@ export default function LinkMaker() {
           onChange={(e) => setUrl((e.target as HTMLInputElement).value)}
           onKeyPress={(e) => handleKeyPress(e)}
         />
-        <Button loading={loading} onClick={addLink}>Make</Button>
+        <Button loading={loading} onClick={addLink}>
+          <IconAsset class="w-6 h-6" />Make
+        </Button>
       </div>
-      <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <script src='/js/html2canvas.min.js'></script>
+      <ViewTypeSwitch viewType={viewType} toggleViewType={toggleViewType} />
+      <div
+        class={`mt-4 gap-4 grid grid-cols-1  ${
+          viewType === "image-left"
+            ? "sm:grid-cols-2"
+            : "sm:grid-cols-2 lg:grid-cols-3"
+        }`}
+      >
+        <script src="/js/html2canvas.min.js"></script>
         {history.map((item: Link) => (
-          <LinkCard link={item} key={item.url} removeLink={removeLink} />
+          <LinkCard
+            link={item}
+            key={item.url}
+            type={viewType}
+            removeLink={removeLink}
+          />
         ))}
       </div>
     </>
