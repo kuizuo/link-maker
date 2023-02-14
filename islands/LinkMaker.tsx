@@ -1,18 +1,35 @@
 import { useState } from "preact/hooks";
-import { signal } from '@preact/signals'
+import { signal } from "@preact/signals";
 import Button from "../components/Button.tsx";
 import Input from "../components/Input.tsx";
 import { Link } from "../types/index.ts";
 import LinkCard from "./LinkCard.tsx";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 
-const defaultHistory: Link[] = [{ "title": "Fresh App", "image": "https://fresh.deno.dev/favicon.ico", "url": "https://fresh.deno.dev/" }, { "title": "Deno — A modern runtime for JavaScript and TypeScript", "description": "Deno is a simple, modern runtime for JavaScript and TypeScript that uses V8 and is built in Rust.", "image": "https://deno.land/favicon.ico", "url": "https://deno.land" }, { "title": "愧怍的小站", "description": "Blog", "image": "https://kuizuo.cn/img/logo.png", "url": "https://kuizuo.cn" }]
+
+const defaultHistory: Link[] = [{
+  title: "fresh - The next-gen web framework.",
+  description: "Just in time edge rendering, island based interactivity, and no configuration TypeScript support usi...",
+  image: "https://fresh.deno.dev/home-og.png?__frsh_c=c5xfm6hjab90",
+  url: "https://fresh.deno.dev/"
+}, {
+  title: "Deno — A modern runtime for JavaScript and TypeScript",
+  description: "Deno is a simple, modern runtime for JavaScript and TypeScript that uses V8 and is built in Rust.",
+  image: "https://deno.land/og-image.png",
+  url: "https://deno.land"
+}, {
+  title: "愧怍的小站",
+  description: "愧怍的个人博客",
+  image: "https://kuizuo.cn/img/logo.png",
+  url: "https://kuizuo.cn",
+}];
 
 export default function LinkMaker() {
   const [url, setUrl] = useState("");
-
-  const history = signal<Link[]>(
-    IS_BROWSER ? JSON.parse(localStorage.getItem("history")!) || defaultHistory : []
+  const [history, setHistory] = useState(
+    IS_BROWSER
+      ? JSON.parse(localStorage.getItem("history")!) || defaultHistory
+      : []
   );
 
   const fetchLink = async (url: string) => {
@@ -25,12 +42,19 @@ export default function LinkMaker() {
     const link = await fetchLink(url);
 
     if (!link) {
-      return
+      alert("link not found");
+      return;
     }
 
-    history.value = [...history.value, link]
+    if (history.some((t) => t.url === link.url)) {
+      return;
+    }
 
-    localStorage.setItem("history", JSON.stringify(history.value));
+    const newHistory = [...(history || []), link];
+    setHistory(newHistory);
+
+    localStorage.setItem("history", JSON.stringify(newHistory));
+
     setUrl("");
   };
 
@@ -41,13 +65,18 @@ export default function LinkMaker() {
   };
 
   function removeLink(link: Link) {
-    history.value = history.value.filter(t => t !== link);
+    const newHistory = history.filter((t) => t !== link);
+
+    setHistory(newHistory);
+
+    localStorage.setItem("history", JSON.stringify(newHistory));
   }
 
   return (
     <>
       <p class="my-4 text-center  text-base text-gray-500">
-        This is a link maker, you can input your link and get a card-style preview.
+        This is a link maker, you can input your link and get a card-style
+        preview.
       </p>
       <div class="flex flex-col items-center justify-start">
         <Input
@@ -59,11 +88,12 @@ export default function LinkMaker() {
         />
         <Button onClick={addLink}>Make</Button>
       </div>
-      <div class="mt-4 flex gap-4">
-        {history.value.map((item: Link) => (
-          <LinkCard link={item} key={item.url} />
+      <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <script src='/js/html2canvas.min.js'></script>
+        {history.map((item: Link) => (
+          <LinkCard link={item} key={item.url} removeLink={removeLink} />
         ))}
       </div>
     </>
-  )
+  );
 }

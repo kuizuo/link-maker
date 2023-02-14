@@ -1,6 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import Header from "../components/Header.tsx";
 import LinkMaker from "../islands/LinkMaker.tsx";
+import SwitchType from "../islands/SwitchType.tsx";
 
 export default function Home() {
   return (
@@ -9,7 +10,7 @@ export default function Home() {
       <Head>
         <title>Link Maker</title>
       </Head>
-      <div class="p-4 mx-auto max-w-screen-md">
+      <div class="p-4 mx-auto max-w-screen-lg">
         <Header></Header>
         <LinkMaker></LinkMaker>
       </div>
