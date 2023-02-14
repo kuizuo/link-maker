@@ -1,11 +1,11 @@
 import { useState } from "preact/hooks";
 import { signal } from "@preact/signals";
+import { IS_BROWSER } from "$fresh/runtime.ts";
 import Button from "../components/Button.tsx";
 import Input from "../components/Input.tsx";
-import { Link } from "../types/index.ts";
 import LinkCard from "./LinkCard.tsx";
-import { IS_BROWSER } from "$fresh/runtime.ts";
 
+import { Link } from "../types/index.ts";
 
 const defaultHistory: Link[] = [{
   title: "fresh - The next-gen web framework.",
@@ -15,7 +15,7 @@ const defaultHistory: Link[] = [{
 }, {
   title: "Deno — A modern runtime for JavaScript and TypeScript",
   description: "Deno is a simple, modern runtime for JavaScript and TypeScript that uses V8 and is built in Rust.",
-  image: "https://deno.land/og-image.png",
+  image: "https://deno.land/og/image.png",
   url: "https://deno.land"
 }, {
   title: "愧怍的小站",
@@ -32,6 +32,8 @@ export default function LinkMaker() {
       : []
   );
 
+  const [loading, setLoading] = useState(false);
+
   const fetchLink = async (url: string) => {
     const response = await fetch(`/api/link?q=${url}`);
     const data = await response.json();
@@ -39,23 +41,31 @@ export default function LinkMaker() {
   };
 
   const addLink = async () => {
-    const link = await fetchLink(url);
+    setLoading(true);
 
-    if (!link) {
-      alert("link not found");
-      return;
+    try {
+
+      const link = await fetchLink(url);
+      setLoading(false);
+      
+      if (!link) {
+        alert("link not found");
+        return;
+      }
+
+      if (history.some((t) => t.url === link.url)) {
+        return;
+      }
+
+      const newHistory = [...(history || []), link];
+      setHistory(newHistory);
+
+      localStorage.setItem("history", JSON.stringify(newHistory));
+
+      setUrl("");
+    } catch (error) {
+      setLoading(false);
     }
-
-    if (history.some((t) => t.url === link.url)) {
-      return;
-    }
-
-    const newHistory = [...(history || []), link];
-    setHistory(newHistory);
-
-    localStorage.setItem("history", JSON.stringify(newHistory));
-
-    setUrl("");
   };
 
   const handleKeyPress = (e: KeyboardEvent) => {
@@ -86,7 +96,7 @@ export default function LinkMaker() {
           onChange={(e) => setUrl((e.target as HTMLInputElement).value)}
           onKeyPress={(e) => handleKeyPress(e)}
         />
-        <Button onClick={addLink}>Make</Button>
+        <Button loading={loading} onClick={addLink}>Make</Button>
       </div>
       <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <script src='/js/html2canvas.min.js'></script>

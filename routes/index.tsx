@@ -1,7 +1,6 @@
 import { Head } from "$fresh/runtime.ts";
 import Header from "../components/Header.tsx";
 import LinkMaker from "../islands/LinkMaker.tsx";
-import SwitchType from "../islands/SwitchType.tsx";
 
 export default function Home() {
   return (
