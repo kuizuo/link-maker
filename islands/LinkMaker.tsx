@@ -102,11 +102,10 @@ export default function LinkMaker() {
       </div>
       <ViewTypeSwitch viewType={viewType} toggleViewType={toggleViewType} />
       <div
-        class={`mt-4 gap-4 grid grid-cols-1  ${
-          viewType === "image-left"
-            ? "sm:grid-cols-2"
-            : "sm:grid-cols-2 lg:grid-cols-3"
-        }`}
+        class={`mt-4 gap-4 grid grid-cols-1  ${viewType === "image-left"
+          ? "sm:grid-cols-2"
+          : "sm:grid-cols-2 lg:grid-cols-3"
+          }`}
       >
         <script src="/js/html2canvas.min.js"></script>
         {history.map((item: Link) => (
@@ -114,6 +113,7 @@ export default function LinkMaker() {
             link={item}
             key={item.url}
             type={viewType}
+            showMenu
             removeLink={removeLink}
           />
         ))}

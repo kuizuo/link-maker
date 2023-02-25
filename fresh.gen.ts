@@ -5,6 +5,7 @@
 import config from "./deno.json" assert { type: "json" };
 import * as $0 from "./routes/api/link.ts";
 import * as $1 from "./routes/index.tsx";
+import * as $2 from "./routes/l/[host].tsx";
 import * as $$0 from "./islands/LinkCard.tsx";
 import * as $$1 from "./islands/LinkMaker.tsx";
 
@@ -12,6 +13,7 @@ const manifest = {
   routes: {
     "./routes/api/link.ts": $0,
     "./routes/index.tsx": $1,
+    "./routes/l/[host].tsx": $2,
   },
   islands: {
     "./islands/LinkCard.tsx": $$0,

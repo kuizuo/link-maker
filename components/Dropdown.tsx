@@ -49,14 +49,14 @@ export default function Dropdown({ icon, items, onSelect, className = '', style 
     >
       {icon}
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-30 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+        <div className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
           <ul className="py-1 w-full flex flex-col">
             {items.map((item) => (
               <div
-                className="w-full inline-flex items-center gap-2 text-center block px-2 py-2 text-sm text-gray-700 hover:(bg-gray-100 text-gray-900 cursor-pointer)"
+                className="w-full inline-flex items-center gap-2 text-center px-2 py-2 text-sm text-gray-700 hover:(bg-gray-100 text-gray-900 cursor-pointer)"
                 onClick={() => handleItemClick(item)}
               >
-                {item.icon && <span>{item.icon}</span>}
+                {item.icon && item.icon}
                 <span>{item.label}</span>
               </div>
             ))}
