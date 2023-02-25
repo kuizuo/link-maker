@@ -1,19 +1,19 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import LinkCard from "../../islands/LinkCard.tsx";
 import { Link } from "../../types/index.ts";
+import { fetchLinkInfo } from "../../utils/fetchLink.ts";
 
 export const handler: Handlers = {
   async GET(req, ctx) {
     const host = ctx.params.host;
-    const info = await (await fetch(`http://link-maker.deno.dev/api/link?q=http://${host}`)).json()
+    const info = await fetchLinkInfo(`http://${host}`)
 
-    const resp = await ctx.render({ info });
-    return resp;
+    return ctx.render(info);
   },
 };
 
 export default function LinkEmbed(props: PageProps) {
-  const linkInfo = props.data.info as Link;
+  const linkInfo = props.data as Link;
 
   return (
     <>

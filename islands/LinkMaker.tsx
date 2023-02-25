@@ -36,8 +36,8 @@ export default function LinkMaker() {
   const { viewType, toggleViewType } = useViewType();
 
   const fetchLink = async (url: string) => {
-    const response = await fetch(`/api/link?q=${url}`);
-    const data = await response.json();
+    const resp = await fetch(`/api/link?q=${url}`);
+    const data = await resp.json();
     return data;
   };
 
